@@ -10,7 +10,7 @@
  they are not possible due to suduko rules for example the first function removes any values that already exist in the
  row.
 
- Eventually, I hope to produce a GUI front from the Sudoku.py for the solver the that uses user inputs rather then the suduko
+ Eventually, I hope to produce a GUI front from the Sudoku.py for the solver that uses user inputs rather then the suduko
  needing to be hard coded in the Sudoku_Solver_2.0.py.
 
  The Sudoku.py is in a very alpha stage due to my lack of knowledge with the pygame module.
