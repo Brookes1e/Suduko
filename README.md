@@ -1,7 +1,7 @@
 ------------------------------------------- PYTHON SUDUKO GAME/SOLVER --------------------------------------------------
 
  This repository was created to in an attempt to further my programming knowledge and become more adept in Python.
- Anyone is welcome to change the code and I would gladly welcome discussions a or suggestions bout any apect of the
+ Anyone is welcome to change the code and I would gladly welcome discussions and or suggestions bout any apect of the
  code...
 
  The Sudoku_Solver_2.0.py solves simple suduko problems, harder puzzles have not been trialed yet. The starting puzzle is
