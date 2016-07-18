@@ -1,6 +1,8 @@
-__auther__ = 'Harry Brookes'
+__author__ = 'Harry Brookes'
 
 import numpy as np
+import Sudoku_Errors
+import Sudoku_File_Load
 
 
 def In_Row(row, x, y,
@@ -62,15 +64,9 @@ def In_Block(x, y, input_suduko_3D):  ##### Removal of any values that exist in 
 ########################################################################################################################
 
 def Main():
-    input_suduko = [0, 0, 0, 0, 0, 8, 0, 9, 2,
-                    1, 3, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 1, 4, 0, 6,
-                    8, 4, 0, 0, 1, 6, 0, 5, 0,
-                    0, 7, 0, 0, 0, 0, 0, 4, 0,
-                    0, 6, 0, 9, 7, 0, 0, 2, 3,
-                    7, 0, 2, 3, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 6, 5,
-                    6, 9, 0, 8, 0, 0, 0, 0, 0, ]
+    user_choice = "File"
+    input_file_name = "Test_input.txt"
+    input_suduko = Sudoku_File_Load.Main(user_choice, input_file_name)
 
     solved = False  ##### Solved flag initilisation
 
