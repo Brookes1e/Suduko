@@ -1,24 +1,22 @@
-import eztext
+
 import pygame
+import itertools
+import time
+
+pygame.init()
+square_size = 50
+screen = pygame.display.set_mode((9 * square_size + 3, 9 * square_size + 3))
+clock = pygame.time.Clock()
+font = pygame.font.SysFont("comicsansms", 14)
 
 
-def main():
-    pygame.init()
-    square_size = 50
-    screen = pygame.display.set_mode((9 * square_size + 3, 9 * square_size + 3))
+def draw(input_sudoku_2d):
     done = False
-    txtbx = eztext.Input(maxlength=45, color=(0, 0, 0), prompt='type here: ')
-    clock = pygame.time.Clock()
 
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-
-            events = pygame.event.get()
-            txtbx.update(events)
-            txtbx.draw(screen)
-
 
         for x in range(9):
             spacing_x = 1
@@ -35,8 +33,12 @@ def main():
                                  pygame.Rect(x * 50 + spacing_x, y * 50 + spacing_y, square_size - spacing_x,
                                              square_size - spacing_y))
 
-        pygame.display.flip()
+        for x_index, y_index in itertools.product(range(9),range(9)):
+            text = font.render(str('%1d' % input_sudoku_2d[x_index][y_index]), True, (0, 0, 0))
+            screen.blit(text,(x_index*square_size+(square_size/2),y_index*square_size+15))
+
+        pygame.display.update()
         clock.tick(60)
+        time.sleep(0.25)
+        done = True
 
-
-if __name__ == '__main__':main()
