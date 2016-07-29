@@ -6,6 +6,7 @@
 import numpy as np
 import Sudoku_Solver_File_Load
 import Sudoku_GUI
+from neupy.core.docs import shared_docs
 
 __author__ = 'Harry Brookes'
 __license__ = 'Apache License 2.0'
@@ -18,34 +19,74 @@ __status__ = 'Development'
 ########################################################################################################################
 
 
+"""
+
+
+"""
 def in_row(row, x, y,
            input_suduko_3d):
-    """Splits suduko into in rows and removes any numbers that exist in the row from the elements third dimension."""
+    """
+    in_row function.
+        Splits suduko into in rows and removes any numbers that exist in the row from the elements third dimension.
+
+    Parameters
+    ----------
+    x : int
+        x axis position in the 9x9 2D suduko matrix being solved
+    y : int
+        y axis position in the 9x9 2D suduko matrix being solved
+    input_suduko_3d : [int,int,int]
+        3D matrix that  carries the current 2D matrix and all the numbers from 1-9 for each position, note that 0
+            is used as a filler and dictates that the element has been removed
+    """
     value_in_row = np.in1d(np.asarray(input_suduko_3d[x, y, 0:]), np.asarray(input_suduko_3d[row, :, 0]))
     for i, value in enumerate(value_in_row):
         if value_in_row[i] == True and i != 0:
-            input_suduko_3d[x, y, i] = 0  # Removal of element is defined as conversion to 0 value
+            input_suduko_3d[x, y, i] = 0
 
 
+@shared_docs(in_row)
 def in_column(column, x, y,
               input_suduko_3d):
-    """Completes the same task as In_Row function except fro columns instead"""
+    """
+    in_column function.
+        Completes the same task as In_Row function except for columns instead
+
+    Parameters
+    ----------
+    {in_row.Parameters}
+    """
     value_in_column = np.in1d(np.asarray(input_suduko_3d[x, y, :]), np.asarray(input_suduko_3d[:, column, 0]))
     for i, value in enumerate(value_in_column):
         if value_in_column[i] == True and i != 0:
             input_suduko_3d[x, y, i] = 0
 
+def blockshaped(input_suduko_2d):
+    """
+     blockshaped function.
+        This code defines the 3x3 matrices that used for in the In_Block function
 
-def blockshaped(arr, nrows, ncols):
-    """This code defines the 3x3 matrices that used for in the In_Block function"""
-    h, w = arr.shape
-    return (arr.reshape(h // nrows, nrows, -1, ncols)
+    Parameters
+    ----------
+    input_suduko_2d : [int,int]
+        describes the current sudoku being solved, varing completed depending on the progression of the main() function
+        in Sudoku_Solver.py
+    """
+    h = input_suduko_2d.shape[0]
+    return (input_suduko_2d.reshape(h // 3, 3, -1, 3)
             .swapaxes(1, 2)
-            .reshape(-1, nrows, ncols))
+            .reshape(-1, 3, 3))
 
-
+@shared_docs(in_row)
 def in_block(x, y, input_suduko_3d):
-    """Removal of any values that exist in the elements 3x3 block"""
+    """
+    in_block function.
+        Removal of any values that exist in the elements 3x3 block
+
+    Parameters
+    ----------
+    {in_row.Parameters}
+    """
     block_id = 100
 
     if x < 3 and y < 3:  # First if statements defines into which block the element of given x,y values is, this are
@@ -68,8 +109,8 @@ def in_block(x, y, input_suduko_3d):
     if 6 <= x <= 8 and 6 <= y <= 8:
         block_id = 8
 
-    suduko_blocks = blockshaped(np.array(input_suduko_3d[:, :, 0]), 3,
-                                3)  # suduko_blocks is a 2D array that holds all of the 9 constituent block elements
+    suduko_blocks = blockshaped(np.array(input_suduko_3d[:, :, 0]))  # suduko_blocks is a 2D array that holds all of the
+        #  9 constituent block elements
     suduko_blocks_flatten = suduko_blocks[block_id].flatten()
 
     value_in_block = np.in1d(input_suduko_3d[x, y, :], suduko_blocks_flatten)
