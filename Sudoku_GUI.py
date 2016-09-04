@@ -1,16 +1,28 @@
 
-import pygame
-import itertools
-import time
 
-pygame.init()
-square_size = 50
-screen = pygame.display.set_mode((9 * square_size + 3, 9 * square_size + 3))
-clock = pygame.time.Clock()
-font = pygame.font.SysFont("comicsansms", 14)
 
 
 def draw(input_sudoku_2d):
+    """
+    draw function.
+        Completes the GUI for the sudoku solver
+
+    Parameters
+    ----------
+    input_sudoku_2d : [int,int]
+        describes the current sudoku being solved, varing completed depending on the progression of the main() function
+        in Sudoku_Solver.py
+    """
+    import pygame
+    import itertools
+    import time
+
+    pygame.init()
+    square_size = 50
+    screen = pygame.display.set_mode((9 * square_size + 3, 9 * square_size + 3))
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont("comicsansms", 14)
+
     done = False
 
     while not done:

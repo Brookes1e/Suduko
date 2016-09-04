@@ -4,8 +4,6 @@
    a custom to GitHub."""
 
 import numpy as np
-import Sudoku_Solver_File_Load
-import Sudoku_GUI
 from neupy.core.docs import shared_docs
 
 __author__ = 'Harry Brookes'
@@ -18,11 +16,6 @@ __status__ = 'Development'
 # -----------------------------------------------___SUDOKU FUNCTIONS___------------------------------------------------#
 ########################################################################################################################
 
-
-"""
-
-
-"""
 def in_row(row, x, y,
            input_suduko_3d):
     """
@@ -61,6 +54,7 @@ def in_column(column, x, y,
         if value_in_column[i] == True and i != 0:
             input_suduko_3d[x, y, i] = 0
 
+
 def blockshaped(input_suduko_2d):
     """
      blockshaped function.
@@ -76,6 +70,7 @@ def blockshaped(input_suduko_2d):
     return (input_suduko_2d.reshape(h // 3, 3, -1, 3)
             .swapaxes(1, 2)
             .reshape(-1, 3, 3))
+
 
 @shared_docs(in_row)
 def in_block(x, y, input_suduko_3d):
@@ -110,7 +105,7 @@ def in_block(x, y, input_suduko_3d):
         block_id = 8
 
     suduko_blocks = blockshaped(np.array(input_suduko_3d[:, :, 0]))  # suduko_blocks is a 2D array that holds all of the
-        #  9 constituent block elements
+    #  9 constituent block elements
     suduko_blocks_flatten = suduko_blocks[block_id].flatten()
 
     value_in_block = np.in1d(input_suduko_3d[x, y, :], suduko_blocks_flatten)
@@ -118,57 +113,3 @@ def in_block(x, y, input_suduko_3d):
     for i, value in enumerate(value_in_block):
         if value_in_block[i] == True and i != 0:
             input_suduko_3d[x, y, i] = 0
-
-########################################################################################################################
-# ------------------------------------------------------___MAIN___-----------------------------------------------------#
-########################################################################################################################
-
-def main():
-    user_choice = "File"
-    input_file_name = "Test_input.txt"
-    input_suduko = Sudoku_Solver_File_Load.load(user_choice, input_file_name)
-
-    solved = False  # Solved flag initialisation
-
-    input_suduko_2d = [input_suduko[i:i + 9] for i in range(0, len(input_suduko), 9)]
-    input_suduko_3d = np.zeros((9, 9, 10))
-    input_suduko_3d[:, :, 0] = input_suduko_2d
-
-    Sudoku_GUI.draw(input_suduko_3d[:, :, 0])
-
-    for i in range(1, 10):
-        input_suduko_3d[:, :, i] = i
-
-    while not solved:
-
-        for (x, y), value in np.ndenumerate(input_suduko_3d[:, :, 0]):
-
-            if input_suduko_3d[x, y, 0] != 0:
-                # Clear values that are in the third dimension behind a predefined value in the suduko
-                # puzzle, no advantage except for visual debugging of potential element values
-                for i in range(1, 10):
-                    input_suduko_3d[x, y, i] = '100'
-
-            in_row(x, x, y, input_suduko_3d)
-            in_column(y, x, y, input_suduko_3d)
-            in_block(x, y, input_suduko_3d)
-
-        for (x, y), value_input_sudoku in np.ndenumerate(input_suduko_3d[:, :, 0]):
-            maybe = []
-            for i, value in enumerate(input_suduko_3d[x, y, 1:]):
-                if value != 0:
-                    maybe.append(value)
-
-            if len(maybe) == 1:
-                input_suduko_3d[x, y, 0] = maybe[0]
-                Sudoku_GUI.draw(input_suduko_3d[:, :, 0])
-
-
-        if 0 not in input_suduko_3d[:, :, 0]:
-            solved = True
-            print input_suduko_3d[:, :, 0]
-
-
-
-if __name__ == '__main__':
-    main()
