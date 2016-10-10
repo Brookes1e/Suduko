@@ -1,56 +1,81 @@
+import __builtin__
+from kivy import require
+from kivy.app import App
+from kivy.config import Config
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
+
+import Solver_main
 
 
+require('1.9.1')
+Config.set('graphics', 'width', '500')
+Config.set('graphics', 'height', '500')
 
 
-def draw(input_sudoku_2d):
+class MyBox(BoxLayout):
+    """MyBox defines a the basic setup of the window, implementing the grid and Solve Button widgets in a vertical
+       structure
+
+       Parameters
+       ----------
+       BoxLayout - imported from the kivy.uix.boxlayout module, BoxLayout is a default class that better layouts within
+       the app's windows
+       """
+    def __init__(self):
+        """Initialization of a specific instance based on the MyBox metaclass
+        """
+        super(MyBox, self).__init__()
+        self.orientation = 'vertical'
+        self.grid = MyBox.add_widget(self, Window())
+        self.button = MyBox.add_widget(self, Solve())
+
+
+class Window(GridLayout):
+    """Windows allows for upper widget in the MyBox class to be defined as a grid system
     """
-    draw function.
-        Completes the GUI for the sudoku solver
 
-    Parameters
-    ----------
-    input_sudoku_2d : [int,int]
-        describes the current sudoku being solved, varing completed depending on the progression of the main() function
-        in Sudoku_Solver.py
-    """
-    import pygame
-    import itertools
-    import time
+    def __init__(self):
+        super(Window, self).__init__()
+        self.cols = 9
+        self.rows = 9
+        self.grid = [Window.add_widget(self, Number_Boxes(number=i)) for i in range(0, 81)]
 
-    pygame.init()
-    square_size = 50
-    screen = pygame.display.set_mode((9 * square_size + 3, 9 * square_size + 3))
-    clock = pygame.time.Clock()
-    font = pygame.font.SysFont("comicsansms", 14)
 
-    done = False
+class Number_Boxes(TextInput, BoxLayout):
+    def __init__(self, number):
+        super(Number_Boxes, self).__init__()
+        self.text = ''
+        self.number = number
+        self.auto_indent = True
+        self.multiline = False
+        self.input_filter = 'int'
+        self.font_size = 28
+        self.padding = [20, 5, 20, 5]
 
-    while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
+    def on_text_validate(self):
+        if len(self.text) > 1:
+            self.text = ''
+            print 'You must enter a number between 0 and 9'
+        else:
+            print self.number, self.text
+            __builtin__.saved_array[self.number] = int(self.text)
 
-        for x in range(9):
-            spacing_x = 1
-            if x % 3 == 0:
-                spacing_x = 3
 
-            for y in range(9):
-                pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(x * 50, y * 50, square_size, square_size))
-                spacing_y = 1
-                if y % 3 == 0:
-                    spacing_y = 3
+class Solve(Button):
+    def __init__(self):
+        super(Solve, self).__init__()
+        self.text = 'Solve'
+        self.size_hint = (1, None)
 
-                pygame.draw.rect(screen, (255, 255, 255),
-                                 pygame.Rect(x * 50 + spacing_x, y * 50 + spacing_y, square_size - spacing_x,
-                                             square_size - spacing_y))
+    def on_press(self):
+        Solver_main.main()
+        GUI.get_running_app().stop()
 
-        for x_index, y_index in itertools.product(range(9),range(9)):
-            text = font.render(str('%1d' % input_sudoku_2d[x_index][y_index]), True, (0, 0, 0))
-            screen.blit(text,(x_index*square_size+(square_size/2),y_index*square_size+15))
 
-        pygame.display.update()
-        clock.tick(60)
-        time.sleep(0.25)
-        done = True
-
+class GUI(App, MyBox):
+    def build(self):
+        self.title = 'Sudoku'
+        return self
