@@ -35,9 +35,16 @@ class MyBox(BoxLayout):
 
 class Window(GridLayout):
     """Windows allows for upper widget in the MyBox class to be defined as a grid system
+    
+    Parameters
+    ––––––––––
+    GridLayout from kivy.unix.gridlayout package
     """
 
     def __init__(self):
+   """initialization of the Window class, producing a 9x9 grid to hold the individual
+      elements of the array. Each element  box is defined by its own widget defined 
+      by the Number_Boxes class"""
         super(Window, self).__init__()
         self.cols = 9
         self.rows = 9
@@ -45,7 +52,17 @@ class Window(GridLayout):
 
 
 class Number_Boxes(TextInput, BoxLayout):
+"""The Number_Boxes class defines initializes and sets up the white boxes used to input
+   The users starting sudoku
+   
+   Parameters
+   TextInput from kivy.unix.textinput package
+   BoxLayout from kivy.unix.boxlayout package
+"""
     def __init__(self, number):
+    """Parameters
+       number calls the user input to that specific element
+    """
         super(Number_Boxes, self).__init__()
         self.text = ''
         self.number = number
@@ -65,6 +82,13 @@ class Number_Boxes(TextInput, BoxLayout):
 
 
 class Solve(Button):
+    """The Solve class defines the button at the bottom of the GUI which allows for the
+       inputted data to be passed to the back-end solver
+       
+       Parameters 
+       Button is from kivy.unix.button
+    """
+    
     def __init__(self):
         super(Solve, self).__init__()
         self.text = 'Solve'
@@ -76,6 +100,14 @@ class Solve(Button):
 
 
 class GUI(App, MyBox):
+  """The GUI class brings together all of the classes defined above and implements the final call to
+     produce the GUI that appears on the screen 
+     
+     Parameters 
+     App - from kivy.app
+     MyBox - from kivy.mybox
+  """
+   
     def build(self):
         self.title = 'Sudoku'
         return self
